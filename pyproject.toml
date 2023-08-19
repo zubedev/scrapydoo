@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "scrapydoo"
+version = "0.1.0"
+description = "Scrapy dappy doo scraper"
+authors = ["Md Zubair Beg <scrapydoo@zube.dev>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11.4"
+scrapy = "^2.10.0"
+scrapyd = "^1.4.2"
+scrapyd-client = "^1.2.3"
+scrapy-playwright = "^0.0.30"
+playwright = "1.36.0"  # pinned due to issue with 1.37.0; installs with scrapy-playwright; remove when fixed
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+ruff = "^0.0.285"
+mypy = "^1.5.1"
+pre-commit = "^3.3.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
+
+[tool.ruff]
+line-length = 120
+# https://beta.ruff.rs/docs/rules
+extend-select = ["I", "N", "PT", "UP"]
+extend-exclude = ["migrations"]
+target-version = "py311"
+
+[tool.mypy]
+ignore_missing_imports = true
+implicit_reexport = true
+strict = true

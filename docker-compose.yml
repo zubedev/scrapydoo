@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  scrapyd:
+    container_name: scrapyd
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "6800:6800"
+    volumes:
+      - scrapyd-data:/var/lib/scrapyd
+      - .:/scrapydoo
+    restart: unless-stopped
+    networks:
+      - scrapyd-net
+
+volumes:
+  scrapyd-data:
+
+networks:
+  scrapyd-net:
