@@ -43,8 +43,7 @@ class ProxyScrapeSpider(scrapy.Spider):  # type: ignore
                 ip=self.parse_ip_address(r),
                 port=self.parse_port(r),
                 protocol=self.parse_protocol(r),
-                # country=self.parse_country(r),  # TODO: need to convert to country code
-                country="",
+                country=self.parse_country(r),
                 anonymity=self.parse_anonymity(r),
                 source=self.name,
             )
