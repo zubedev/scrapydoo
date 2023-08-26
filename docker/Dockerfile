@@ -1,6 +1,7 @@
 FROM python:3.11-slim
 
-RUN apt-get update  \
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update -y  \
     && apt-get upgrade -y  \
     && apt-get install --no-install-recommends -y wait-for-it
 
@@ -10,19 +11,22 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV POETRY_VERSION=1.5.1
 
 # install poetry
-RUN pip install --upgrade pip
-RUN pip install "poetry==$POETRY_VERSION"
-RUN poetry config virtualenvs.create false
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip \
+    && pip install "poetry==$POETRY_VERSION" \
+    && poetry config virtualenvs.create false
 
 # set work directory as /scrapydoo
 WORKDIR /scrapydoo
 
 # install dependencies
 COPY poetry.lock* pyproject.toml /scrapydoo/
-RUN poetry install --with=dev --no-interaction
+RUN --mount=type=cache,target=/root/.cache/pip \
+    poetry install --with=dev --no-interaction
 
 # install scrapy dependencies
-RUN playwright install --with-deps chromium \
+RUN --mount=type=cache,target=/var/cache/apt \
+    playwright install --with-deps chromium \
     # cleaning up unused files \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
