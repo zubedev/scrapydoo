@@ -35,7 +35,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
 COPY . .
 
 # copy start script
-COPY docker/start /start
-RUN chmod +x /start
+COPY docker/dev/start /start
+RUN sed -i "s/\r$//g" /start \
+    && chmod +x /start
 
 CMD ["/start"]

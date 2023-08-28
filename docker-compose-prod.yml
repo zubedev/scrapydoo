@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  scrapyd:
+    build:
+      context: .
+      dockerfile: docker/prod/Dockerfile
+    env_file:
+      - .env
+    environment:
+      - SCRAPYD_URL=https://scrapydoo.zube.dev
+    ports:
+      - "6800:6800"
+    volumes:
+      - scrapyd-data:/var/lib/scrapyd
+    labels:
+      caddy: scrapydoo.zube.dev
+      caddy.reverse_proxy: "{{upstreams 6800}}"
+    restart: unless-stopped
+    networks:
+      - scrapyd-net
+
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:2.8-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - CADDY_INGRESS_NETWORK=scrapyd-net
+    networks:
+      - scrapyd-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - scrapyd-caddy-data:/data
+    restart: unless-stopped
+
+volumes:
+  scrapyd-data:
+  scrapyd-caddy-data: {}
+
+networks:
+  scrapyd-net:

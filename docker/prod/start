@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# turn on bash's job control
+set -m
+
+# start the scrapyd server main process and put it in the background
+echo "Starting scrapyd server..."
+scrapyd --reactor=asyncio --pidfile= &
+
+# run the wait-for-it script to wait for the server endpoint to be ready
+wait-for-it "localhost:6800" --timeout=60 --strict -- echo "Scrapyd is up and running!"
+
+# deploy the project
+echo "Deploying scraper..."
+scrapyd-deploy --version 0.1.0
+rm -rf ./build ./*.egg-info
+
+# bring the scrapyd server process back to the foreground
+fg %1
