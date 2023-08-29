@@ -69,9 +69,6 @@ RUN sed -i "s/\r$//g" /entrypoint \
     && sed -i "s/\r$//g" /start \
     && chmod +x /start
 
-RUN echo "username = ${SCRAPYD_USER}" >> scrapyd.conf \
-    && echo "password = ${SCRAPYD_PASSWORD}" >> scrapyd.conf
-
 # copy project and remove unnecessary files
 COPY --chown=scrapydoo:scrapydoo . .
 RUN rm -rf \

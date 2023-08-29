@@ -7,8 +7,6 @@ services:
       dockerfile: docker/prod/Dockerfile
     env_file:
       - .env
-    environment:
-      - SCRAPYD_URL=https://scrapydoo.zube.dev
     ports:
       - "6800:6800"
     volumes:
@@ -19,6 +17,14 @@ services:
     restart: unless-stopped
     networks:
       - scrapyd-net
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
 
   caddy:
     image: lucaslorentz/caddy-docker-proxy:2.8-alpine
@@ -33,6 +39,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - scrapyd-caddy-data:/data
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
 
 volumes:
   scrapyd-data:
