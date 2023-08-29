@@ -13,6 +13,8 @@ env:
   POETRY_VERSION: 1.5.1
 
 jobs:
+  tests:
+    uses: ./.github/workflows/ci.yml
   deploy:
     name: "Scrapydoo Deploy"
     runs-on: ubuntu-latest
