@@ -11,7 +11,7 @@ python = "^3.11.4"
 scrapy = "^2.10.0"
 scrapyd = "^1.4.2"
 scrapyd-client = "^1.2.3"
-scrapy-playwright = "^0.0.30"
+scrapy-playwright = "^0.0.31"
 playwright = "1.36.0"  # pinned due to issue with 1.37.0; installs with scrapy-playwright; remove when fixed
 
 [tool.poetry.group.dev.dependencies]
