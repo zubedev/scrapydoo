@@ -16,7 +16,7 @@ playwright = "1.36.0"  # pinned due to issue with 1.37.0; installs with scrapy-p
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
-ruff = "^0.0.286"
+ruff = "^0.0.287"
 mypy = "^1.5.1"
 pre-commit = "^3.3.3"
 
