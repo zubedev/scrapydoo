@@ -36,7 +36,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
     wait-for-it
 
 RUN groupadd -g 999 scrapydoo  \
-    && useradd -l -r -u 999 -g scrapydoo scrapydoo
+    && useradd -l -m -r -u 999 -g scrapydoo scrapydoo
 
 # set environment variables
 ENV PYTHONUNBUFFERED 1
