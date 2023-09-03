@@ -57,6 +57,8 @@ WORKDIR /scrapydoo
 # install scrapy dependencies
 RUN --mount=type=cache,target=/var/cache/apt \
     playwright install --with-deps chromium \
+    && mv ~/.cache /scrapydoo/ \
+    && chown -R scrapydoo:scrapydoo /scrapydoo/.cache \
     # cleaning up unused files \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
