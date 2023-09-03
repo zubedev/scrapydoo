@@ -51,14 +51,20 @@ class ProxyScrapeSpider(BaseSpider):
 
     def start_requests(self) -> Generator[scrapy.Request, Any, None]:
         for url in self.start_urls:
-            yield scrapy.Request(url=url, callback=self.prepare, meta=self.get_meta())
+            yield scrapy.Request(url=url, callback=self.prepare, headers=self.get_headers(), meta=self.get_meta())
 
     def prepare(self, response: TextResponse, **kwargs: Any) -> Generator[scrapy.Request, Any, None]:
         # get the value from the input field with name="xx0"
         xx0 = response.xpath("//input[@name='xx0']/@value").get()
         formdata = {"xx0": xx0, "xpp": "5", "xf1": "1", "xf2": "0", "xf4": "0", "xf5": "0"}
         yield scrapy.FormRequest.from_response(
-            response, formdata=formdata, method="POST", callback=self.parse, meta=self.get_meta(), **kwargs
+            response,
+            formdata=formdata,
+            method="POST",
+            callback=self.parse,
+            headers=self.get_headers(),
+            meta=self.get_meta(),
+            **kwargs
         )
 
     def set_element_paths(self) -> ElementPathsTypedDict:

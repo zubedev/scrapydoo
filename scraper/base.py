@@ -1,3 +1,4 @@
+import random
 import re
 from collections.abc import Generator
 from pathlib import Path
@@ -8,6 +9,7 @@ from scrapy import Request, Selector
 from scrapy.http import TextResponse
 from scrapy.selector import SelectorList
 
+from scraper.agents import USER_AGENTS
 from scraper.items import ProxyItem
 from scraper.types import ElementPathsTypedDict, RequestMetaTypedDict
 
@@ -24,7 +26,12 @@ class BaseSpider(scrapy.Spider):  # type: ignore
         if not self.start_urls:
             raise AttributeError("Crawling could not start: 'start_urls' not found or empty.")
         for url in self.start_urls:
-            yield Request(url, callback=self.parse, meta=self.get_meta(), dont_filter=True)
+            yield Request(url, callback=self.parse, headers=self.get_headers(), meta=self.get_meta(), dont_filter=True)
+
+    def get_headers(self) -> dict[str, str]:
+        return {
+            "User-Agent": random.choice(USER_AGENTS),
+        }
 
     def get_meta(self) -> RequestMetaTypedDict:
         """Return a `RequestMetaTypedDict` of meta data for the request."""
