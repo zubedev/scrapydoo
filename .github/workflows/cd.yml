@@ -39,7 +39,7 @@ jobs:
   deploy:
     name: "Scrapydoo Deploy"
     runs-on: ubuntu-latest
-    needs: tests
+    needs: build
     steps:
       - uses: appleboy/ssh-action@v1.0.0  # deploy using ssh
         with:
