@@ -15,13 +15,39 @@ env:
 jobs:
   tests:
     uses: ./.github/workflows/ci.yml
+
+  build:
+    name: "Scrapydoo Build"
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: docker/setup-buildx-action@v2
+      - uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./docker/prod/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/scrapydoo:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/scrapydoo:latest
+
   deploy:
     name: "Scrapydoo Deploy"
     runs-on: ubuntu-latest
     needs: tests
     steps:
-      - uses: actions/checkout@v3  # check out the repo
-      - uses: superfly/flyctl-actions/setup-flyctl@master  # setup flyctl
-      - run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - uses: appleboy/ssh-action@v1.0.0  # deploy using ssh
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            docker stop scrapyd || true
+            docker rm scrapyd || true
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/scrapydoo:latest
+            ./run_scrapyd
