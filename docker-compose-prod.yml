@@ -20,11 +20,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.25"
-          memory: 256M
+          cpus: "0.1"
+          memory: 200M
         reservations:
-          cpus: "0.25"
-          memory: 256M
+          cpus: "0.1"
+          memory: 200M
 
   caddy:
     image: lucaslorentz/caddy-docker-proxy:2.8-alpine
@@ -42,11 +42,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.25"
-          memory: 256M
+          cpus: "0.1"
+          memory: 100M
         reservations:
-          cpus: "0.25"
-          memory: 256M
+          cpus: "0.1"
+          memory: 100M
 
 volumes:
   scrapyd-data:
