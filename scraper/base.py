@@ -1,9 +1,10 @@
 import random
 import re
-from collections.abc import Generator
+from collections.abc import Callable, Generator
 from pathlib import Path
 from typing import Any, Literal, overload
 
+import requests
 import scrapy
 from scrapy import Request, Selector
 from scrapy.http import TextResponse
@@ -11,32 +12,91 @@ from scrapy.selector import SelectorList
 
 from scraper.agents import USER_AGENTS
 from scraper.items import ProxyItem
-from scraper.types import ElementPathsTypedDict, RequestMetaTypedDict
+from scraper.types import ElementPathsTypedDict, FlareSolverrResponseTypedDict, RequestMetaTypedDict
 
 
 class BaseSpider(scrapy.Spider):  # type: ignore
+    start_urls: list[str] | None = None  # must be set in subclass
     render_to_file = False  # for debugging
+    use_flaresolverr = False  # for cloudflare challenge
     use_playwright = False  # for JS rendering
 
     def __init__(self, name: str = None, **kwargs: Any) -> None:  # type: ignore[assignment]
         super().__init__(name=name, **kwargs)
-        self.paths = self.set_element_paths()
+        self.paths: ElementPathsTypedDict = self.set_element_paths()
+        self.ua: str = kwargs.get("ua", None)
+        self.headers: dict[str, Any] = kwargs.get("headers", None)
+        self.meta: RequestMetaTypedDict = kwargs.get("meta", None)
+        self.cookies: dict[str, str] | list[dict[str, str]] = kwargs.get("cookies", None)
 
     def start_requests(self) -> Generator[scrapy.Request, Any, None]:
         if not self.start_urls:
             raise AttributeError("Crawling could not start: 'start_urls' not found or empty.")
+        if isinstance(self.start_urls, str):
+            self.start_urls = [self.start_urls]
+        if self.use_flaresolverr:
+            self.solve_challenge(self.start_urls[0])  # solve the challenge before crawling
+
+        callback, cb_kwargs = self.get_callback()
         for url in self.start_urls:
-            yield Request(url, callback=self.parse, headers=self.get_headers(), meta=self.get_meta(), dont_filter=True)
+            yield Request(
+                url,
+                callback=callback,
+                headers=self.get_headers(),
+                cookies=self.get_cookies(),
+                meta=self.get_meta(),
+                dont_filter=True,
+                cb_kwargs=cb_kwargs,
+            )
 
-    def get_headers(self) -> dict[str, str]:
-        return {
-            "User-Agent": random.choice(USER_AGENTS),
-        }
+    def solve_challenge(self, url: str, **kwargs: Any) -> dict[str, str] | list[dict[str, str]] | None:
+        if "FLARESOLVERR_URL" not in self.settings:
+            self.log("FLARESOLVERR_URL not found in settings.py")
+            return None
 
-    def get_meta(self) -> RequestMetaTypedDict:
+        response = requests.post(
+            self.settings["FLARESOLVERR_URL"],
+            json={"cmd": "request.get", "url": url},
+            allow_redirects=True,
+            **kwargs,
+        )
+        if not response.ok:
+            self.log(f"FlareSolverr error: {response.text}")
+            return None
+
+        data: FlareSolverrResponseTypedDict = response.json()
+        if solution := data.get("solution"):
+            if "userAgent" in solution:
+                self.ua = solution["userAgent"]
+            if "cookies" in solution:
+                self.cookies = data["solution"]["cookies"]
+                return self.cookies
+
+        self.log(f"FlareSolverr error: either solution or cookies not found: {data}")
+        return None
+
+    def get_callback(self) -> tuple[Callable, dict[str, Any] | None]:  # type: ignore[type-arg]
+        """Return a tuple of callback function and callback keyword arguments."""
+        return self.parse, None
+
+    def get_cookies(self) -> dict[str, str] | list[dict[str, str]] | None:
+        return self.cookies
+
+    def get_user_agent(self, ua: str = "") -> str:
+        if not self.ua:
+            self.ua = ua or random.choice(USER_AGENTS)
+        return self.ua
+
+    def get_headers(self, **kwargs: Any) -> dict[str, str]:
+        if not self.headers:
+            self.headers = {"User-Agent": self.get_user_agent(ua=kwargs.pop("ua", None)), **kwargs}
+        return self.headers
+
+    def get_meta(self, **kwargs: Any) -> RequestMetaTypedDict:
         """Return a `RequestMetaTypedDict` of meta data for the request."""
-        meta: RequestMetaTypedDict = {"playwright": self.use_playwright}
-        return meta
+        if not self.meta:
+            self.meta = {"playwright": self.use_playwright, **kwargs}
+        return self.meta
 
     def set_element_paths(self) -> ElementPathsTypedDict:
         """Return a `ElementPathsTypedDict` of path elements for selectors.

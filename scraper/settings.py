@@ -6,6 +6,7 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import os
 
 BOT_NAME = "scraper"
 
@@ -116,3 +117,5 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 #     },
 # }
 FEED_EXPORT_ENCODING = "utf-8"
+
+FLARESOLVERR_URL = os.getenv("FLARESOLVERR_URL")
