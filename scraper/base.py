@@ -152,6 +152,16 @@ class BaseSpider(scrapy.Spider):  # type: ignore
         self.logger.debug(f"[{xpath=}] {selector=} {data=}")
         return data  # type: ignore[no-any-return]
 
+    def get_pattern(self, pattern_for: str) -> str:
+        patterns = {
+            "ip": r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",
+            "port": r"\d{1,5}",
+            "protocol": r"http|https|socks4|socks5",
+            "country": r"[A-Z]{2}",
+            "anonymity": r"anonymous|elite|transparent",
+        }
+        return patterns.get(pattern_for, r"")
+
     def match_data(self, data: str, pattern: str) -> str:
         regex = re.compile(pattern)
         if match := regex.search(data):
@@ -161,12 +171,12 @@ class BaseSpider(scrapy.Spider):  # type: ignore
     def parse_ip_address(self, row: Selector) -> str:
         """IP address -> pattern matching 123.255.123.255"""
         ip = self.get_data(row, self.paths["ip"])
-        return self.match_data(ip, r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
+        return self.match_data(ip, self.get_pattern("ip"))
 
     def parse_port(self, row: Selector) -> int:
         """Port -> pattern matching 1-5 digits"""
         port = self.get_data(row, self.paths["port"])
-        port_match = self.match_data(port, r"\d{1,5}")
+        port_match = self.match_data(port, self.get_pattern("port"))
         return int(port_match) if port_match else 0  # return 0 if no port is found
 
     def parse_protocol(self, row: Selector) -> str:
@@ -174,18 +184,18 @@ class BaseSpider(scrapy.Spider):  # type: ignore
         if not (proto_path := self.paths.get("protocol", "")):
             return ""
         protocol = self.get_data(row, proto_path)
-        return self.match_data(protocol.lower(), r"http|https|socks4|socks5")
+        return self.match_data(protocol.lower(), self.get_pattern("protocol"))
 
     def parse_country(self, row: Selector) -> str:
         """Country -> pattern matching 2 uppercase letters"""
         if not (country_path := self.paths.get("country", "")):
             return ""
         country = self.get_data(row, country_path)
-        return self.match_data(country.upper(), r"[A-Z]{2}")
+        return self.match_data(country.upper(), self.get_pattern("country"))
 
     def parse_anonymity(self, row: Selector) -> str:
         """Anonymity -> pattern matching anonymous|elite|transparent"""
         if not (anon_path := self.paths.get("anonymity", "")):
             return ""
         anonymity = self.get_data(row, anon_path)
-        return self.match_data(anonymity.lower(), r"anonymous|elite|transparent")
+        return self.match_data(anonymity.lower(), self.get_pattern("anonymity"))
