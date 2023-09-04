@@ -10,7 +10,7 @@ repos:
     -   id: check-added-large-files
 
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.286
+    rev: v0.0.287
     hooks:
     -   id: ruff
 
@@ -24,3 +24,5 @@ repos:
     hooks:
     -   id: mypy
         args: [--strict, --ignore-missing-imports, --implicit-reexport]
+        additional_dependencies:
+          - types-requests

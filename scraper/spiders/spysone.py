@@ -1,4 +1,4 @@
-from collections.abc import Generator
+from collections.abc import Callable, Generator
 from typing import Any
 
 import scrapy
@@ -47,11 +47,11 @@ class ProxyScrapeSpider(BaseSpider):
     name = "spysone"
     allowed_domains = ["spys.one"]
     start_urls = ["https://spys.one/en/anonymous-proxy-list/"]
+    use_flaresolverr = True
     use_playwright = True
 
-    def start_requests(self) -> Generator[scrapy.Request, Any, None]:
-        for url in self.start_urls:
-            yield scrapy.Request(url=url, callback=self.prepare, headers=self.get_headers(), meta=self.get_meta())
+    def get_callback(self) -> tuple[Callable, dict[str, Any] | None]:  # type: ignore[type-arg]
+        return self.prepare, {"cookies": self.cookies, "headers": self.headers, "meta": self.meta}
 
     def prepare(self, response: TextResponse, **kwargs: Any) -> Generator[scrapy.Request, Any, None]:
         # get the value from the input field with name="xx0"
@@ -62,9 +62,7 @@ class ProxyScrapeSpider(BaseSpider):
             formdata=formdata,
             method="POST",
             callback=self.parse,
-            headers=self.get_headers(),
-            meta=self.get_meta(),
-            **kwargs
+            **kwargs,  # cookies, headers and meta
         )
 
     def set_element_paths(self) -> ElementPathsTypedDict:
