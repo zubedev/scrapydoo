@@ -8,15 +8,14 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11.4"
-scrapy = "^2.10.0"
+scrapy = "^2.10.1"
 scrapyd = "^1.4.2"
 scrapyd-client = "^1.2.3"
-scrapy-playwright = "^0.0.30"
-playwright = "1.36.0"  # pinned due to issue with 1.37.0; installs with scrapy-playwright; remove when fixed
+scrapy-playwright = "^0.0.31"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
-ruff = "^0.0.286"
+ruff = "^0.0.287"
 mypy = "^1.5.1"
 pre-commit = "^3.3.3"
 types-requests = "^2.31.0.2"
