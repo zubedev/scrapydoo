@@ -11,7 +11,7 @@ python = "~3.11"
 scrapy = "^2.10.1"
 scrapyd = "^1.4.2"
 scrapyd-client = "^1.2.3"
-scrapy-playwright = "^0.0.31"
+scrapy-playwright = "^0.0.32"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
