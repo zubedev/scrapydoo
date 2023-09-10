@@ -1,24 +1,24 @@
 [tool.poetry]
 name = "scrapydoo"
 version = "0.1.0"
-description = "Scrapy dappy doo scraper"
+description = "Scrapy dappy doo crawler for proxy sites"
 authors = ["Md Zubair Beg <scrapydoo@zube.dev>"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.11"
-scrapy = "^2.10.1"
-scrapyd = "^1.4.2"
-scrapyd-client = "^1.2.3"
-scrapy-playwright = "^0.0.31"
+scrapy = "^2.10"
+scrapyd = "^1.4"
+scrapyd-client = "^1.2"
+scrapy-playwright = "^0.0.32"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.7.0"
+black = "^23.7"
 ruff = "^0.0.287"
-mypy = "^1.5.1"
-pre-commit = "^3.3.3"
-types-requests = "^2.31.0.2"
+mypy = "^1.5"
+pre-commit = "^3.3"
+types-requests = "^2.31"
 
 [build-system]
 requires = ["poetry-core"]
