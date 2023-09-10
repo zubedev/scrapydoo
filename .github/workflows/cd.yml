@@ -35,6 +35,8 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/scrapydoo:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/scrapydoo:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy:
     name: "Scrapydoo Deploy"
