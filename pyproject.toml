@@ -8,17 +8,17 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.11"
-scrapy = "^2.10"
-scrapyd = "^1.4"
-scrapyd-client = "^1.2"
+scrapy = "^2.10.1"
+scrapyd = "^1.4.2"
+scrapyd-client = "^1.2.3"
 scrapy-playwright = "^0.0.32"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.7"
-ruff = "^0.0.287"
-mypy = "^1.5"
-pre-commit = "^3.3"
-types-requests = "^2.31"
+black = "^23.9.1"
+ruff = "^0.0.289"
+mypy = "^1.5.1"
+pre-commit = "^3.4.0"
+types-requests = "^2.31.0.2"
 
 [build-system]
 requires = ["poetry-core"]
