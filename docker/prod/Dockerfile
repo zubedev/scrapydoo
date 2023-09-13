@@ -11,7 +11,7 @@ WORKDIR /requirements
 COPY poetry.lock* pyproject.toml ./
 
 # install poetry, export requirements
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,target=/root/.cache \
     pip install --upgrade pip \
     && pip install "poetry==$POETRY_VERSION" \
     && poetry export -f requirements.txt --output requirements.txt
@@ -21,12 +21,12 @@ RUN python -m venv /venv
 # set python to use the virtual environment
 ENV PATH="/venv/bin:$PATH"
 # install dependencies to the virtual environment
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,target=/root/.cache \
     /venv/bin/python -m pip install -r requirements.txt
 
 FROM python:3.11-slim
 
-RUN --mount=type=cache,target=/var/cache/apt \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update -y \
     && apt-get upgrade -y \
     && apt-get install --no-install-recommends -y \
@@ -55,9 +55,11 @@ RUN mkdir -p /scrapydoo \
 WORKDIR /scrapydoo
 
 # install scrapy dependencies
-RUN --mount=type=cache,target=/var/cache/apt \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/root/.cache \
     playwright install --with-deps chromium \
-    && mv ~/.cache /home/scrapydoo/ \
+    && mkdir -p /home/scrapydoo/.cache \
+    && cp -R /root/.cache/ms-playwright /home/scrapydoo/.cache/ \
     && chown -R scrapydoo:scrapydoo /home/scrapydoo/.cache \
     # cleaning up unused files \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
