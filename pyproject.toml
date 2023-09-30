@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "~3.11"
 scrapy = "^2.10.1"
-scrapyd = "^1.4.2"
+scrapyd = "^1.4.3"
 scrapyd-client = "^1.2.3"
 scrapy-playwright = "^0.0.32"
 

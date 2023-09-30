@@ -1103,13 +1103,13 @@ scrapy = ">=2.0,<2.4.0 || >2.4.0"
 
 [[package]]
 name = "scrapyd"
-version = "1.4.2"
+version = "1.4.3"
 description = "A service for running Scrapy spiders, with an HTTP API"
 optional = false
 python-versions = "*"
 files = [
-    {file = "scrapyd-1.4.2-py2.py3-none-any.whl", hash = "sha256:2f030bfa1cb04309406c6a96f7ec236706ea04a988fda88e39c07d1890eb7ca9"},
-    {file = "scrapyd-1.4.2.tar.gz", hash = "sha256:fd10df9ba9a2a147cc8015bf15a47a2949e02ea8dee9dcb12e3bc98c2ff50615"},
+    {file = "scrapyd-1.4.3-py2.py3-none-any.whl", hash = "sha256:4ad70b3043e76b125316ce71d1ed1cc8e17e8c3f75e0fa95208fadcb69d9407e"},
+    {file = "scrapyd-1.4.3.tar.gz", hash = "sha256:ad2cfb47cdfb03e30d0401db6ff95864988ad5cce84081ad6b55f2e2b52b50bd"},
 ]
 
 [package.dependencies]
@@ -1424,4 +1424,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.11"
-content-hash = "253398710fdd9a7bce75ce8251b0e328e9ec904258c8b69b3f4c41a5f24c0800"
+content-hash = "19f5923873ef07d291e3238675a297fd45f11835744ea75a5d2ac1631b428ed4"
