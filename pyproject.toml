@@ -15,7 +15,7 @@ scrapy-playwright = "^0.0.32"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"
-ruff = "^0.0.289"
+ruff = "^0.0.292"
 mypy = "^1.5.1"
 pre-commit = "^3.4.0"
 types-requests = "^2.31.0.2"
