@@ -3,7 +3,7 @@ FROM python:3.11-slim as requirements
 # set environment variables
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV POETRY_VERSION=1.6.1
+ENV POETRY_VERSION=1.8.2
 
 # set work directory as /scrapydoo
 WORKDIR /requirements

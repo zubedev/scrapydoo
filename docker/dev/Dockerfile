@@ -8,7 +8,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # set environment variables
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV POETRY_VERSION=1.6.1
+ENV POETRY_VERSION=1.8.2
 
 # install poetry
 RUN --mount=type=cache,target=/root/.cache \
