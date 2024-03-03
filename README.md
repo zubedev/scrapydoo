@@ -7,7 +7,7 @@
 ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝   ╚═════╝  ╚═════╝  ╚═════╝
 >--------------------------------- Scrapy dappy doo crawler for proxy sites
 ```
-[![scrapy](https://img.shields.io/badge/scrapy-2.10-%235fa839?style=flat-square)](https://scrapy.org)
+[![scrapy](https://img.shields.io/badge/scrapy-2.11-%235fa839?style=flat-square)](https://scrapy.org)
 [![python](https://img.shields.io/badge/python-3.11-%233776AB?style=flat-square&logo=python)](https://www.python.org)
 [![mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org)
 [![black](https://img.shields.io/badge/code%20style-black-black.svg?style=flat-square&logo=stylelint)](https://github.com/psf/black)
