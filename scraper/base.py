@@ -139,12 +139,10 @@ class BaseSpider(scrapy.Spider):  # type: ignore
         return response.xpath(xpath or self.paths["rows"])
 
     @overload
-    def get_data(self, row: Selector, xpath: str, many: Literal[False] = False) -> str:
-        ...
+    def get_data(self, row: Selector, xpath: str, many: Literal[False] = False) -> str: ...
 
     @overload
-    def get_data(self, row: Selector, xpath: str, many: Literal[True]) -> list[str]:
-        ...
+    def get_data(self, row: Selector, xpath: str, many: Literal[True]) -> list[str]: ...
 
     def get_data(self, row: Selector, xpath: str, many: bool = False) -> str | list[str]:
         selector = row.xpath(xpath)
