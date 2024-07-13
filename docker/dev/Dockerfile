@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update -y  \
@@ -8,7 +8,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # set environment variables
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV POETRY_VERSION=1.8.2
+ENV POETRY_VERSION=1.8.3
 
 # install poetry
 RUN --mount=type=cache,target=/root/.cache \

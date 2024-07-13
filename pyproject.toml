@@ -5,20 +5,21 @@ description = "Scrapy dappy doo crawler for proxy sites"
 authors = ["Md Zubair Beg <scrapydoo@zube.dev>"]
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
-python = "~3.11"
-scrapy = "^2.11.1"
+python = "~3.12"
+scrapy = "^2.11.2"
 scrapyd = "^1.4.3"
 scrapyd-client = "^1.2.3"
-scrapy-playwright = "^0.0.34"
+scrapy-playwright = "^0.0.39"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.2.0"
-ruff = "^0.3.0"
-mypy = "^1.7.1"
-pre-commit = "^3.6.2"
-types-requests = "^2.31.0"
+black = "^24.4.2"
+ruff = "^0.5.1"
+mypy = "^1.10.1"
+pre-commit = "^3.7.1"
+types-requests = "^2.32.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -32,7 +33,7 @@ line-length = 120
 # https://beta.ruff.rs/docs/rules
 extend-select = ["I", "N", "PT", "UP"]
 extend-exclude = ["migrations"]
-target-version = "py311"
+target-version = "py312"
 
 [tool.mypy]
 ignore_missing_imports = true
